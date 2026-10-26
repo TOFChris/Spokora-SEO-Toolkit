@@ -3,7 +3,7 @@
  * Plugin Name: Spokora SEO Toolkit
  * Plugin URI: https://spokora.com
  * Description: SEO toolkit for WordPress websites: titles, schema, sitemap, and redirects. No account and no license key.
- * Version: 0.1.27
+ * Version: 0.1.28
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * Network: true

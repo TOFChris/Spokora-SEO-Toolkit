@@ -5,7 +5,7 @@ Tags: seo, schema, sitemap, redirects, xml-sitemap
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.1.27
+Stable tag: 0.1.28
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,7 +35,7 @@ No Spokora account. No license key. SEO features in this plugin are not locked b
 * In-editor search SEO score (model drafting stays in Pro)
 
 Product site: [spokora.com](https://spokora.com)
-Source: [github.com/TOFChris/Spokora-FreeWPPlugin](https://github.com/TOFChris/Spokora-FreeWPPlugin)
+Source: [github.com/TOFChris/Spokora-SEO-Toolkit](https://github.com/TOFChris/Spokora-SEO-Toolkit)
 
 = External services =
 
@@ -85,6 +85,9 @@ Yes. Network Activate so each site in the network runs the plugin. Titles, schem
 
 == Changelog ==
 
+= 0.1.28 =
+* Admin menu sits after Comments and before Appearance, same place as Spokora Pro. A tall side list shifts up and scrolls instead of running off the screen.
+
 = 0.1.27 =
 * Directory review: display name Spokora SEO Toolkit, text domain spokora-seo-toolkit.
 * Setup screen styles are enqueued. JSON-LD is encoded inside the script tag. Business Info saves only known fields.
@@ -124,6 +127,9 @@ Yes. Network Activate so each site in the network runs the plugin. Titles, schem
 * Honest copy about version checks (removed in 0.1.20 for the directory).
 
 == Upgrade Notice ==
+
+= 0.1.28 =
+Menu sits with Spokora Pro, after Comments. The side list stays on screen.
 
 = 0.1.27 =
 WordPress.org review build. Business Info from older installs is kept and renamed automatically.

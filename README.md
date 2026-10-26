@@ -59,7 +59,7 @@ See [docs/PRODUCT.md](docs/PRODUCT.md) and [docs/MODULE-CUT.md](docs/MODULE-CUT.
 
 ### From a release zip (recommended)
 
-1. Download the latest `spokora-free-x.y.z.zip` from [Releases](https://github.com/TOFChris/Spokora-FreeWPPlugin/releases) or [spokora.com](https://spokora.com).
+1. Download the latest `spokora-free-x.y.z.zip` from [Releases](https://github.com/TOFChris/Spokora-SEO-Toolkit/releases) or [spokora.com](https://spokora.com).
 2. In wp-admin: **Plugins → Add New → Upload Plugin**, choose the zip, install, activate.
 3. Open **Spokora → Quick setup** and follow the wizard. On multisite, Network Activate, then run Quick setup on each site that needs its own Business Info.
 
@@ -83,7 +83,7 @@ Output: `dist/spokora-free-{version}.zip`.
 
 ## Updates
 
-After WordPress.org listing, use **Plugins → Automatic updates** like any other directory plugin. Optional release emails: [spokora.com/updates](https://spokora.com/updates/). GitHub [Releases](https://github.com/TOFChris/Spokora-FreeWPPlugin/releases) stay in sync with the directory zip.
+After WordPress.org listing, use **Plugins → Automatic updates** like any other directory plugin. Optional release emails: [spokora.com/updates](https://spokora.com/updates/). GitHub [Releases](https://github.com/TOFChris/Spokora-SEO-Toolkit/releases) stay in sync with the directory zip.
 
 ---
 

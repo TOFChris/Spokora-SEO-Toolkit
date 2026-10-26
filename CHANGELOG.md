@@ -4,6 +4,12 @@ All notable changes to **Spokora Free** in this repository are documented here.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.1.28] - 2026-10-26
+
+### Changed
+
+- Admin menu sits after Comments and before Appearance, matching Spokora Pro. A tall flyout shifts up and scrolls if it would leave the window.
+
 ## [0.1.27] - 2026-10-26
 
 ### Changed
