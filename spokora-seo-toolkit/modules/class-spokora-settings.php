@@ -300,7 +300,7 @@ class Spokora_Settings_Engine {
                                 }
                                 ?>
                                 <textarea id="spokora_global_schema_json" name="spokora_options[global_schema_json]" rows="12" style="width: 100%; font-family: monospace;" placeholder='{ "@context": "https://schema.org", "@graph": [ ... ] }'><?php echo esc_textarea( $options['global_schema_json'] ?? '' ); ?></textarea>
-                                <p class="description" style="margin-top: 8px;">Optional. Valid JSON-LD object or array. When set, this <strong>replaces</strong> the auto-generated Organization/WebSite graph. Per-page “Custom JSON-LD” in the editor still wins for that URL.</p>
+                                <p class="description" style="margin-top: 8px;"><?php esc_html_e( 'Optional. Valid JSON-LD object or array. When set, this replaces the auto-generated Organization/WebSite graph. Per-page Custom JSON-LD in the editor still wins for that URL. Spokora Pro can draft global JSON-LD from Business Info with your model.', 'spokora-seo-toolkit' ); ?></p>
                             </td>
                         </tr>
                     </table>

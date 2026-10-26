@@ -4,6 +4,16 @@ All notable changes to **Spokora Free** in this repository are documented here.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.1.29] - 2026-10-26
+
+### Fixed
+
+- AI readiness scores update when you enable **Public AI document** and save in the block editor (stored scores and sidebar gauges match saved LLMS meta).
+
+### Changed
+
+- Schema copy notes that model-generated JSON-LD is available in **Spokora Pro** (Free keeps presets and paste).
+
 ## [0.1.28] - 2026-10-26
 
 ### Changed

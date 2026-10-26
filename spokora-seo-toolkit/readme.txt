@@ -5,7 +5,7 @@ Tags: seo, schema, sitemap, redirects, xml-sitemap
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.1.28
+Stable tag: 0.1.29
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,7 +32,7 @@ No Spokora account. No license key. SEO features in this plugin are not locked b
 * Optional GA4 Measurement ID — loads only after the visitor accepts non-essential cookies
 * `/llms.txt`, `/ai-docs/{slug}.md`, `/md/{slug}.md`
 * Optional IndexNow pings (off until you turn them on)
-* In-editor search SEO score (model drafting stays in Pro)
+* In-editor search SEO + AI readiness scores (model drafting and JSON-LD generation stay in Spokora Pro)
 
 Product site: [spokora.com](https://spokora.com)
 Source: [github.com/TOFChris/Spokora-SEO-Toolkit](https://github.com/TOFChris/Spokora-SEO-Toolkit)
@@ -84,6 +84,10 @@ No. It is off on new installs until you enable it under Cookies & privacy.
 Yes. Network Activate so each site in the network runs the plugin. Titles, schema, sitemap, redirects, and `/llms.txt` are per site — a shop subdomain keeps its own Business Info. If you use ThreeWP Broadcast, SEO box fields copy with the post. Do not run this plugin next to Spokora Pro.
 
 == Changelog ==
+
+= 0.1.29 =
+* AI readiness scores update correctly when you enable Public AI document and save in the block editor.
+* JSON-LD: use starter presets or paste JSON here; Spokora Pro adds model-generated per-page and global JSON-LD (Configure → Keys).
 
 = 0.1.28 =
 * Admin menu sits after Comments and before Appearance, same place as Spokora Pro. A tall side list shifts up and scrolls instead of running off the screen.

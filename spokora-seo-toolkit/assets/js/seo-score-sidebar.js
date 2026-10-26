@@ -51,11 +51,28 @@
 			if (!spokoraSeoScoreSidebar.postId) return;
 			var timer;
 			var lastSig = '';
+			function llmsOverridesFromDom() {
+				var out = {};
+				var publicEl = document.querySelector('input[name="spokora_llms_public"]');
+				if (publicEl) {
+					out.llms_public = publicEl.checked ? '1' : '';
+				}
+				var summaryEl = document.getElementById('spokora_llms_summary');
+				if (summaryEl) {
+					out.llms_summary = summaryEl.value || '';
+				}
+				var mdEl = document.getElementById('spokora_llms_md');
+				if (mdEl) {
+					out.llms_md = mdEl.value || '';
+				}
+				return out;
+			}
 			function buildSignature() {
 				var sel = wp.data.select('core/editor');
 				if (!sel) return '';
 				var titleEl = document.getElementById('spokora_seo_title');
 				var descEl = document.getElementById('spokora_seo_desc');
+				var llms = llmsOverridesFromDom();
 				return [
 					sel.getEditedPostContent(),
 					sel.getEditedPostAttribute('title') || '',
@@ -63,9 +80,9 @@
 					descEl ? descEl.value : '',
 					document.getElementById('spokora_focus_keyword')?.value || '',
 					document.getElementById('spokora_additional_keywords')?.value || '',
-					document.querySelector('input[name="spokora_llms_public"]')?.checked ? '1' : '',
-					document.getElementById('spokora_llms_summary')?.value || '',
-					document.getElementById('spokora_llms_md')?.value || '',
+					llms.llms_public !== undefined ? llms.llms_public : '\u0002',
+					llms.llms_summary !== undefined ? llms.llms_summary : '\u0002',
+					llms.llms_md !== undefined ? llms.llms_md : '\u0002',
 				].join('\u0001');
 			}
 			function recalc() {
@@ -76,27 +93,45 @@
 					lastSig = sig;
 					var titleEl = document.getElementById('spokora_seo_title');
 					var descEl = document.getElementById('spokora_seo_desc');
+					var overrides = {
+						title: titleEl ? titleEl.value : '',
+						description: descEl ? descEl.value : '',
+						focus_keyword: document.getElementById('spokora_focus_keyword')?.value || '',
+						additional_keywords: document.getElementById('spokora_additional_keywords')?.value || '',
+						content: wp.data.select('core/editor').getEditedPostContent(),
+					};
+					Object.assign(overrides, llmsOverridesFromDom());
 					jQuery.post(spokoraSeoScoreSidebar.ajaxUrl, {
 						action: 'spokora_recalc_seo_scores',
 						nonce: spokoraSeoScoreSidebar.nonce,
 						post_id: spokoraSeoScoreSidebar.postId,
-						overrides: {
-							title: titleEl ? titleEl.value : '',
-							description: descEl ? descEl.value : '',
-							focus_keyword: document.getElementById('spokora_focus_keyword')?.value || '',
-							additional_keywords: document.getElementById('spokora_additional_keywords')?.value || '',
-							content: wp.data.select('core/editor').getEditedPostContent(),
-							llms_public: document.querySelector('input[name="spokora_llms_public"]')?.checked ? '1' : '',
-							llms_summary: document.getElementById('spokora_llms_summary')?.value || '',
-							llms_md: document.getElementById('spokora_llms_md')?.value || '',
-						},
+						overrides: overrides,
 					}).done(function (res) {
 						if (res.success) setScores(res.data);
 					});
 				}, 1200);
 			}
+			var wasSaving = false;
+			function refreshFromServer() {
+				jQuery.post(spokoraSeoScoreSidebar.ajaxUrl, {
+					action: 'spokora_recalc_seo_scores',
+					nonce: spokoraSeoScoreSidebar.nonce,
+					post_id: spokoraSeoScoreSidebar.postId,
+					overrides: {},
+				}).done(function (res) {
+					if (res.success) setScores(res.data);
+				});
+			}
 			var unsub = wp.data.subscribe(function () {
 				recalc();
+				var sel = wp.data.select('core/editor');
+				if (!sel) return;
+				var saving = sel.isSavingPost();
+				if (wasSaving && !saving && sel.didPostSaveRequestSucceed && sel.didPostSaveRequestSucceed()) {
+					lastSig = '';
+					refreshFromServer();
+				}
+				wasSaving = saving;
 			});
 			return function () {
 				unsub();

@@ -650,9 +650,15 @@ function spokora_calculate_ai_readiness_score( $post_id, array $overrides = arra
 		);
 	}
 
-	$public  = isset( $overrides['llms_public'] ) ? ! empty( $overrides['llms_public'] ) : get_post_meta( $post_id, '_spokora_llms_public', true ) === '1';
-	$summary = isset( $overrides['llms_summary'] ) ? trim( (string) $overrides['llms_summary'] ) : trim( (string) get_post_meta( $post_id, '_spokora_llms_summary', true ) );
-	$md      = isset( $overrides['llms_md'] ) ? trim( (string) $overrides['llms_md'] ) : trim( (string) get_post_meta( $post_id, '_spokora_llms_md', true ) );
+	$public  = array_key_exists( 'llms_public', $overrides )
+		? ! empty( $overrides['llms_public'] )
+		: get_post_meta( $post_id, '_spokora_llms_public', true ) === '1';
+	$summary = array_key_exists( 'llms_summary', $overrides )
+		? trim( (string) $overrides['llms_summary'] )
+		: trim( (string) get_post_meta( $post_id, '_spokora_llms_summary', true ) );
+	$md      = array_key_exists( 'llms_md', $overrides )
+		? trim( (string) $overrides['llms_md'] )
+		: trim( (string) get_post_meta( $post_id, '_spokora_llms_md', true ) );
 
 	$checks = array();
 
@@ -884,3 +890,80 @@ function spokora_get_page_scores_sidebar_boot( $post_id ) {
 		),
 	);
 }
+
+/**
+ * Whether the classic LLMS metabox was submitted on this save (block editor or post.php).
+ *
+ * @return bool
+ */
+function spokora_scoring_llms_meta_submitted() {
+	return isset( $_POST['spokora_llms_meta_nonce'] )
+		&& wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['spokora_llms_meta_nonce'] ) ), 'spokora_llms_save_meta' );
+}
+
+/**
+ * Post meta keys that should trigger a score refresh when updated (REST or admin).
+ *
+ * @return string[]
+ */
+function spokora_scoring_meta_keys_that_trigger_recompute() {
+	return array(
+		'_spokora_llms_public',
+		'_spokora_llms_include',
+		'_spokora_llms_summary',
+		'_spokora_llms_md',
+		'_spokora_seo_title',
+		'_spokora_seo_desc',
+		'_spokora_custom_schema',
+		'_spokora_focus_keyword',
+		'_spokora_additional_keywords',
+		'_spokora_seo_score_exclude',
+	);
+}
+
+/**
+ * Recompute scores from stored meta (no POST overrides). Used after save + REST meta writes.
+ *
+ * @param int $post_id Post ID.
+ * @return void
+ */
+function spokora_finalize_post_scores( $post_id ) {
+	$post_id = (int) $post_id;
+	if ( $post_id <= 0 ) {
+		return;
+	}
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return;
+	}
+	if ( wp_is_post_revision( $post_id ) ) {
+		return;
+	}
+	if ( ! function_exists( 'spokora_scoring_post_types' ) || ! in_array( get_post_type( $post_id ), spokora_scoring_post_types(), true ) ) {
+		return;
+	}
+	if ( ! function_exists( 'spokora_compute_and_save_scores' ) ) {
+		return;
+	}
+	spokora_compute_and_save_scores( $post_id );
+}
+
+/**
+ * @param int    $meta_id    Meta ID.
+ * @param int    $object_id  Post ID.
+ * @param string $meta_key   Meta key.
+ * @param mixed  $meta_value Meta value.
+ * @return void
+ */
+function spokora_maybe_recompute_scores_on_meta_change( $meta_id, $object_id, $meta_key, $meta_value ) {
+	unset( $meta_id, $meta_value );
+
+	if ( in_array( $meta_key, array( '_spokora_seo_score', '_spokora_llms_score', '_spokora_seo_score_updated' ), true ) ) {
+		return;
+	}
+	if ( ! in_array( $meta_key, spokora_scoring_meta_keys_that_trigger_recompute(), true ) ) {
+		return;
+	}
+	spokora_finalize_post_scores( (int) $object_id );
+}
+add_action( 'updated_post_meta', 'spokora_maybe_recompute_scores_on_meta_change', 20, 4 );
+add_action( 'added_post_meta', 'spokora_maybe_recompute_scores_on_meta_change', 20, 4 );

@@ -15,6 +15,7 @@ class Spokora_SEO_Score_Engine {
 		add_action( 'spokora_render_seo_score_panel', array( $this, 'render_score_panel' ), 10, 1 );
 		add_action( 'spokora_after_seo_fields', array( $this, 'render_serp_and_counts' ), 10, 1 );
 		add_action( 'save_post', array( $this, 'save_exclude_and_scores' ), 20, 1 );
+		add_action( 'save_post', array( $this, 'finalize_scores_after_save' ), 25, 1 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 		add_action( 'wp_ajax_spokora_recalc_seo_scores', array( $this, 'ajax_recalc' ) );
 		add_action( 'wp_ajax_spokora_explain_seo_score', array( $this, 'ajax_explain' ) );
@@ -184,15 +185,28 @@ class Spokora_SEO_Score_Engine {
 		if ( isset( $_POST['spokora_seo_desc'] ) ) {
 			$overrides['description'] = sanitize_textarea_field( wp_unslash( $_POST['spokora_seo_desc'] ) );
 		}
-		if ( isset( $_POST['spokora_llms_summary'] ) ) {
-			$overrides['llms_summary'] = sanitize_text_field( wp_unslash( $_POST['spokora_llms_summary'] ) );
+		if ( function_exists( 'spokora_scoring_llms_meta_submitted' ) && spokora_scoring_llms_meta_submitted() ) {
+			if ( isset( $_POST['spokora_llms_summary'] ) ) {
+				$overrides['llms_summary'] = sanitize_text_field( wp_unslash( $_POST['spokora_llms_summary'] ) );
+			}
+			if ( isset( $_POST['spokora_llms_md'] ) ) {
+				$overrides['llms_md'] = sanitize_textarea_field( wp_unslash( $_POST['spokora_llms_md'] ) );
+			}
+			$overrides['llms_public'] = ! empty( $_POST['spokora_llms_public'] ) ? '1' : '';
 		}
-		if ( isset( $_POST['spokora_llms_md'] ) ) {
-			$overrides['llms_md'] = sanitize_textarea_field( wp_unslash( $_POST['spokora_llms_md'] ) );
-		}
-		$overrides['llms_public'] = ! empty( $_POST['spokora_llms_public'] ) ? '1' : '';
 
 		spokora_compute_and_save_scores( $post_id, $overrides );
+	}
+
+	/**
+	 * After all metaboxes persist meta, recompute from the database (fixes block editor / REST saves).
+	 *
+	 * @param int $post_id Post ID.
+	 */
+	public function finalize_scores_after_save( $post_id ) {
+		if ( function_exists( 'spokora_finalize_post_scores' ) ) {
+			spokora_finalize_post_scores( $post_id );
+		}
 	}
 
 	/**

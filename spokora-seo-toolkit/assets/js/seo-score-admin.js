@@ -58,7 +58,7 @@
 	}
 
 	function gatherOverrides() {
-		return {
+		var overrides = {
 			title: $('#spokora_seo_title').val() || '',
 			description: $('#spokora_seo_desc').val() || '',
 			focus_keyword: $('#spokora_focus_keyword').val() || '',
@@ -66,11 +66,19 @@
 			content: (typeof wp !== 'undefined' && wp.data && wp.data.select('core/editor'))
 				? wp.data.select('core/editor').getEditedPostContent()
 				: '',
-			llms_public: $('input[name="spokora_llms_public"]').is(':checked') ? '1' : '',
-			llms_summary: $('#spokora_llms_summary').val() || '',
-			llms_md: $('#spokora_llms_md').val() || '',
 			excluded: $('input[name="spokora_seo_score_exclude"]').is(':checked') ? '1' : ''
 		};
+		var $llmsPublic = $('input[name="spokora_llms_public"]');
+		if ($llmsPublic.length) {
+			overrides.llms_public = $llmsPublic.is(':checked') ? '1' : '';
+		}
+		if ($('#spokora_llms_summary').length) {
+			overrides.llms_summary = $('#spokora_llms_summary').val() || '';
+		}
+		if ($('#spokora_llms_md').length) {
+			overrides.llms_md = $('#spokora_llms_md').val() || '';
+		}
+		return overrides;
 	}
 
 	var recalcTimer;
@@ -112,8 +120,16 @@
 		if (!$panel.length) return;
 
 		updateCharCounts();
-		$('#spokora_seo_title, #spokora_seo_desc, #spokora_focus_keyword, #spokora_additional_keywords, #spokora_llms_summary, #spokora_llms_md').on('input', scheduleRecalc);
-		$('input[name="spokora_llms_public"], input[name="spokora_seo_score_exclude"]').on('change', scheduleRecalc);
+		$(document).on(
+			'input',
+			'#spokora_seo_title, #spokora_seo_desc, #spokora_focus_keyword, #spokora_additional_keywords, #spokora_llms_summary, #spokora_llms_md',
+			scheduleRecalc
+		);
+		$(document).on(
+			'change',
+			'input[name="spokora_llms_public"], input[name="spokora_llms_include"], input[name="spokora_seo_score_exclude"]',
+			scheduleRecalc
+		);
 
 		if (typeof wp !== 'undefined' && wp.data && wp.data.subscribe) {
 			var lastContent = '';

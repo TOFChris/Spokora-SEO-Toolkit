@@ -103,7 +103,7 @@ class Spokora_MetaBox_Engine {
 
         echo '<hr style="margin: 20px 0;">';
         echo '<label for="spokora_custom_schema" style="font-weight: bold; display: block; color: #0056D2;">' . esc_html__( 'Custom JSON-LD Schema (Optional)', 'spokora-seo-toolkit' ) . '</label>';
-        echo '<p style="font-size: 12px; color: #666;">' . esc_html__( 'Choose a starter below or paste raw JSON-LD to override the dynamic schema generator for this page.', 'spokora-seo-toolkit' ) . '</p>';
+        echo '<p style="font-size: 12px; color: #666;">' . esc_html__( 'Choose a starter below or paste raw JSON-LD. Spokora Pro can draft JSON-LD from page content with your model (Configure → Keys).', 'spokora-seo-toolkit' ) . '</p>';
         if ( function_exists( 'spokora_render_json_ld_preset_field' ) ) {
             spokora_render_json_ld_preset_field( 'spokora_custom_schema', (int) $post->ID, 'spokora_schema_json_preset' );
         }
