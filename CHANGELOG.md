@@ -4,6 +4,15 @@ All notable changes to **Spokora Free** in this repository are documented here.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.1.27] - 2026-10-26
+
+### Changed
+
+- WordPress.org review: display name **Spokora SEO Toolkit**, text domain and requested slug **spokora-seo-toolkit**. Plugin folder is `spokora-seo-toolkit/`.
+- Setup CSS is enqueued. JSON-LD is printed with `wp_print_inline_script_tag` and hex encoding. `spokora_options` saves a whitelist of scalar fields.
+- Admin menu position is 81 (after Settings). Readme documents IndexNow and Google Analytics terms, privacy, what is sent, and that both stay off until opted in.
+- Legacy `hwc_*` option keys and `_hw_seo_*` post meta are copied once to Spokora keys. Runtime reads Spokora keys only.
+
 ## [0.1.26] - 2026-10-23
 
 ### Added

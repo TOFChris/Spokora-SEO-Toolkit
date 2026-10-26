@@ -1,7 +1,7 @@
 # Builds spokora-free zip for WordPress upload (Linux/cPanel-safe POSIX paths).
 # Do NOT use Compress-Archive — Windows backslashes break unzip on the host.
 #
-# Layout: spokora-free/spokora-free.php
+# Layout: spokora-seo-toolkit/spokora-seo-toolkit.php
 #
 # Usage (from repo root):
 #   powershell -ExecutionPolicy Bypass -File .\scripts\build-spokora-free-zip.ps1
@@ -9,7 +9,7 @@
 $ErrorActionPreference = 'Stop'
 
 $repoRoot   = Split-Path $PSScriptRoot -Parent
-$sourceDir  = Join-Path $repoRoot 'spokora-free'
+$sourceDir  = Join-Path $repoRoot 'spokora-seo-toolkit'
 $versionFile = Join-Path $sourceDir 'includes\version.php'
 $version = '0.0.0'
 if (Test-Path -LiteralPath $versionFile) {
@@ -24,10 +24,10 @@ if (-not (Test-Path -LiteralPath $distDir)) {
     New-Item -ItemType Directory -Path $distDir -Force | Out-Null
 }
 
-$zipPath = Join-Path $distDir ("spokora-free-$version.zip")
+$zipPath = Join-Path $distDir ("spokora-seo-toolkit-$version.zip")
 
-if (-not (Test-Path (Join-Path $sourceDir 'spokora-free.php'))) {
-    throw "Source not found: $sourceDir\spokora-free.php"
+if (-not (Test-Path (Join-Path $sourceDir 'spokora-seo-toolkit.php'))) {
+    throw "Source not found: $sourceDir\spokora-seo-toolkit.php"
 }
 
 function Write-SpokoraFreeZipPosix {
@@ -56,7 +56,7 @@ function Write-SpokoraFreeZipPosix {
             if ($name.StartsWith('.') -or $name -like '*.md' -or $name -eq 'Thumbs.db' -or $name -eq '.DS_Store') {
                 return
             }
-            $entryName = 'spokora-free/' + $relative
+            $entryName = 'spokora-seo-toolkit/' + $relative
             [void][System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile(
                 $archive,
                 $_.FullName,
@@ -78,9 +78,9 @@ function Write-SpokoraFreeZipPosix {
         if ($backslash) {
             throw 'Zip contains backslash paths: ' + ($backslash | Select-Object -First 3 -Join ', ')
         }
-        $main = $script:names | Where-Object { $_ -eq 'spokora-free/spokora-free.php' }
+        $main = $script:names | Where-Object { $_ -eq 'spokora-seo-toolkit/spokora-seo-toolkit.php' }
         if (-not $main) {
-            throw 'Missing entry spokora-free/spokora-free.php'
+            throw 'Missing entry spokora-seo-toolkit/spokora-seo-toolkit.php'
         }
     } finally {
         $zip.Dispose()
@@ -88,4 +88,4 @@ function Write-SpokoraFreeZipPosix {
 }
 
 Write-SpokoraFreeZipPosix -Destination $zipPath -Folder $sourceDir
-Write-Host "OK: $zipPath ($($names.Count) entries, v$version, POSIX paths spokora-free/)"
+Write-Host "OK: $zipPath ($($names.Count) entries, v$version, POSIX paths spokora-seo-toolkit/)"

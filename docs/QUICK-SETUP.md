@@ -45,7 +45,7 @@ Hijack from the wizard POSTs `spokora_run_migration` with `spokora_setup_return=
 
 Option keys written on Business Info (merge, do not wipe the rest of `spokora_options`):
 
-`hwc_org_name`, `global_desc`, `schema_type`, `hwc_logo_url`, `hwc_public_email`, `schema_phone`, `schema_street`, `schema_city`, `schema_region`, `schema_zip`, `og_image`
+`org_name`, `global_desc`, `schema_type`, `logo_url`, `public_email`, `schema_phone`, `schema_street`, `schema_city`, `schema_region`, `schema_zip`, `og_image`
 
 Left on the Business Info **screen**, not the wizard: Agency ROI, founder, services, socials, global JSON-LD import, front-end SEO output toggle.
 
