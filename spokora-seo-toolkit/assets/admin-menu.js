@@ -99,6 +99,22 @@
 		var openTimer = null;
 		var closeTimer = null;
 
+		function placeFlyout(row) {
+			var flyout = row.querySelector(".spokora-menu-flyout");
+			if (!flyout) {
+				return;
+			}
+			flyout.style.top = "0px";
+			if (!row.classList.contains("is-open")) {
+				return;
+			}
+			var rect = flyout.getBoundingClientRect();
+			var overflow = rect.bottom - (window.innerHeight - 8);
+			if (overflow > 0) {
+				flyout.style.top = (-overflow) + "px";
+			}
+		}
+
 		function setOpen(exceptId) {
 			list.querySelectorAll(".spokora-menu-label").forEach(function (row) {
 				var on = row.getAttribute("data-spokora-area") === exceptId;
@@ -106,6 +122,15 @@
 				var button = row.querySelector(".spokora-menu-toggle");
 				if (button) {
 					button.setAttribute("aria-expanded", on ? "true" : "false");
+				}
+				if (!on) {
+					placeFlyout(row);
+				}
+			});
+			window.requestAnimationFrame(function () {
+				var openRow = list.querySelector(".spokora-menu-label.is-open");
+				if (openRow) {
+					placeFlyout(openRow);
 				}
 			});
 		}

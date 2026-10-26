@@ -43,7 +43,7 @@ function spokora_free_register_menu() {
 		$parent,
 		'spokora_free_render_home',
 		SPOKORA_PLUGIN_URL . 'assets/menu-icon.png',
-		81
+		58
 	);
 	add_submenu_page(
 		$parent,
