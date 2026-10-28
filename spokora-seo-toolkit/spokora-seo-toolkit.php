@@ -3,7 +3,7 @@
  * Plugin Name: Spokora SEO Toolkit
  * Plugin URI: https://spokora.com
  * Description: SEO toolkit for WordPress websites: titles, schema, sitemap, and redirects. No account and no license key.
- * Version: 0.1.29
+ * Version: 0.1.30
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * Network: true
@@ -114,6 +114,23 @@ if ( spokora_free_pro_is_present() ) {
 	return;
 }
 
+if ( ! function_exists( 'str_contains' ) ) {
+	/**
+	 * PHP 7.4 polyfill. PHP 8+ provides this natively.
+	 *
+	 * @param string $haystack Haystack.
+	 * @param string $needle Needle.
+	 * @return bool
+	 */
+	function str_contains( $haystack, $needle ) {
+		$needle = (string) $needle;
+		if ( '' === $needle ) {
+			return true;
+		}
+		return false !== strpos( (string) $haystack, $needle );
+	}
+}
+
 if ( ! function_exists( 'str_starts_with' ) ) {
 	/**
 	 * PHP 7.4 polyfill.
@@ -127,6 +144,28 @@ if ( ! function_exists( 'str_starts_with' ) ) {
 			return true;
 		}
 		return 0 === strncmp( (string) $haystack, (string) $needle, strlen( (string) $needle ) );
+	}
+}
+
+if ( ! function_exists( 'str_ends_with' ) ) {
+	/**
+	 * PHP 7.4 polyfill.
+	 *
+	 * @param string $haystack Haystack.
+	 * @param string $needle Needle.
+	 * @return bool
+	 */
+	function str_ends_with( $haystack, $needle ) {
+		$needle   = (string) $needle;
+		$haystack = (string) $haystack;
+		if ( '' === $needle ) {
+			return true;
+		}
+		$len = strlen( $needle );
+		if ( strlen( $haystack ) < $len ) {
+			return false;
+		}
+		return substr( $haystack, -$len ) === $needle;
 	}
 }
 

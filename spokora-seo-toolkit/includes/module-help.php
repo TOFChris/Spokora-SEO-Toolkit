@@ -15,22 +15,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 function spokora_get_module_help_blurbs() {
 	return array(
 		'seo'         => array(
-			'summary' => __( 'Front-end title, meta description, canonical, and JSON-LD.', 'spokora-seo-toolkit' ),
+			'summary' => __( 'Front-end title, meta description, canonical URL, robots meta, and JSON-LD.', 'spokora-seo-toolkit' ),
 		),
 		'seo_score'   => array(
 			'summary' => __( 'Search SEO + AI readiness scores in the editor and a site overview. Scores do not call a model.', 'spokora-seo-toolkit' ),
 			'menu'    => __( 'Spokora → SEO scores', 'spokora-seo-toolkit' ),
 		),
 		'metabox'     => array(
-			'summary' => __( 'SEO box on posts and pages: keyphrases, title, description, schema.', 'spokora-seo-toolkit' ),
+			'summary' => __( 'SEO box on posts and pages: keyphrases, title, description, canonical URL, robots, schema.', 'spokora-seo-toolkit' ),
 		),
 		'llms'        => array(
 			'summary' => __( '/llms.txt hub and /ai-docs/{slug}.md for pages you mark as AI docs.', 'spokora-seo-toolkit' ),
-			'menu'    => __( 'Spokora → LLMS / AI docs', 'spokora-seo-toolkit' ),
+			'menu'    => __( 'Spokora → Configure → AI index', 'spokora-seo-toolkit' ),
 		),
 		'markdown'    => array(
 			'summary' => __( 'Markdown copy of each published post and page at /md/{slug}.md.', 'spokora-seo-toolkit' ),
-			'menu'    => __( 'Spokora → Markdown', 'spokora-seo-toolkit' ),
+			'menu'    => __( 'Spokora → Configure → Markdown copies', 'spokora-seo-toolkit' ),
 		),
 		'settings'    => array(
 			'summary' => __( 'Site-wide SEO defaults and the front-end SEO toggle. Import SEO copies titles, descriptions, and exact 301s from Yoast, Rank Math, AIOSEO, or SEOPress.', 'spokora-seo-toolkit' ),

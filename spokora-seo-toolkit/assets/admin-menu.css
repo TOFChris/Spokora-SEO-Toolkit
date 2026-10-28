@@ -276,6 +276,18 @@
 	}
 }
 
+textarea.spokora-code-field {
+	width: 100%;
+	margin-top: 5px;
+	padding: 12px;
+	border: 1px solid #8c8f94;
+	border-radius: 4px;
+	background: #fff;
+	color: #1d2327;
+	font-family: Consolas, Monaco, monospace;
+	line-height: 1.5;
+}
+
 .spokora-home-coffee {
 	position: relative;
 	max-width: 52rem;

@@ -4,6 +4,22 @@ All notable changes to **Spokora Free** in this repository are documented here.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.1.30] - 2026-10-28
+
+### Added
+
+- Canonical URLs and robots in the SEO module (`modules/class-spokora-seo.php`): `output_canonical()` on `wp_head`, `filter_robots()` on `wp_robots`, and `send_robots_header()` on `send_headers`. Editor and Quick Edit can set a canonical URL and index/follow. Noindex URLs are left out of `sitemap.xml`.
+
+### Fixed
+
+- PHP 7.4 activation and runtime: `str_contains()`, `str_starts_with()`, and `str_ends_with()` polyfills in `spokora-seo-toolkit.php` before the includes that call them (`includes/article-markdown.php`, `includes/content-images.php`, `includes/legacy-seo-plugins.php`).
+
+### Changed
+
+- Home welcome note is the first block under the title.
+- JSON-LD and redirect editors use a light code field.
+- AI index (`/llms.txt`) and Markdown copies sit under Configure. Search Console teaser copy describes search performance.
+
 ## [0.1.29] - 2026-10-26
 
 ### Fixed

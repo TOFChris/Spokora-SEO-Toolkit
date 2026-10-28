@@ -5,7 +5,7 @@ Tags: seo, schema, sitemap, redirects, xml-sitemap
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.1.29
+Stable tag: 0.1.30
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,6 +84,11 @@ No. It is off on new installs until you enable it under Cookies & privacy.
 Yes. Network Activate so each site in the network runs the plugin. Titles, schema, sitemap, redirects, and `/llms.txt` are per site — a shop subdomain keeps its own Business Info. If you use ThreeWP Broadcast, SEO box fields copy with the post. Do not run this plugin next to Spokora Pro.
 
 == Changelog ==
+
+= 0.1.30 =
+* Canonical URLs and robots are implemented in the SEO module: a canonical link on public pages, a per-page canonical override, and robots meta plus an X-Robots-Tag header from the editor (default remains index, follow). Noindex pages are omitted from the XML sitemap.
+* PHP 7.4: polyfills for str_contains(), str_starts_with(), and str_ends_with() so those calls do not fatal on the declared PHP version.
+* Admin: welcome note sits at the top of Home. Code fields use the light dashboard theme. AI index (llms.txt) and Markdown copies live under Configure.
 
 = 0.1.29 =
 * AI readiness scores update correctly when you enable Public AI document and save in the block editor.

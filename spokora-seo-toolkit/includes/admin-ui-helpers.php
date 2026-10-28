@@ -78,17 +78,9 @@ function spokora_free_review_url() {
  */
 function spokora_admin_areas() {
 	return array(
-		'create'   => array(
-			'label' => __( 'Create', 'spokora-seo-toolkit' ),
-			'pages' => array( 'spokora-llms' ),
-		),
 		'optimize' => array(
 			'label' => __( 'Optimize', 'spokora-seo-toolkit' ),
 			'pages' => array( 'spokora-seo-scores', 'spokora-redirects', 'spokora-indexnow' ),
-		),
-		'results'  => array(
-			'label' => __( 'Results', 'spokora-seo-toolkit' ),
-			'pages' => array( 'spokora-markdown' ),
 		),
 		'setup'    => array(
 			'label' => __( 'Configure', 'spokora-seo-toolkit' ),
@@ -97,6 +89,8 @@ function spokora_admin_areas() {
 				'spokora-modules',
 				'spokora-settings',
 				'spokora-legacy-import',
+				'spokora-llms',
+				'spokora-markdown',
 				'spokora-backups',
 				'spokora-consent',
 				'spokora-help',

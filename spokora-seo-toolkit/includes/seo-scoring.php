@@ -747,7 +747,7 @@ function spokora_calculate_ai_readiness_score( $post_id, array $overrides = arra
 			'site_preamble',
 			__( 'Site llms preamble', 'spokora-seo-toolkit' ),
 			'pass',
-			__( 'Hub preamble configured in Spokora → LLMS.', 'spokora-seo-toolkit' ),
+			__( 'Hub preamble configured in Spokora → AI index.', 'spokora-seo-toolkit' ),
 			10,
 			10
 		);
@@ -756,7 +756,7 @@ function spokora_calculate_ai_readiness_score( $post_id, array $overrides = arra
 			'site_preamble',
 			__( 'Site llms preamble', 'spokora-seo-toolkit' ),
 			'warn',
-			__( 'Optional: add hub preamble under LLMS / AI docs.', 'spokora-seo-toolkit' ),
+			__( 'Optional: add a hub preamble under Configure → AI index.', 'spokora-seo-toolkit' ),
 			10,
 			spokora_score_points_for_status( 'warn', 10 )
 		);

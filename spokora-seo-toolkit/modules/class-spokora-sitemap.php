@@ -39,6 +39,10 @@ class Spokora_Sitemap_Engine {
             if ( $query->have_posts() ) {
                 while ( $query->have_posts() ) {
                     $query->the_post();
+                    $robots = (string) get_post_meta( get_the_ID(), '_spokora_robots', true );
+                    if ( false !== strpos( $robots, 'noindex' ) ) {
+                        continue;
+                    }
                     $url = get_permalink();
                     $modified = get_the_modified_time( 'c' );
                     

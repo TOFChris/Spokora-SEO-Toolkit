@@ -92,6 +92,11 @@ function spokora_free_render_home() {
 	?>
 	<div class="wrap spokora-free-home">
 		<h1><?php echo esc_html__( 'Spokora SEO Toolkit', 'spokora-seo-toolkit' ); ?></h1>
+		<?php
+		if ( function_exists( 'spokora_render_home_intro' ) ) {
+			spokora_render_home_intro();
+		}
+		?>
 		<p class="description">
 			<?php
 			echo esc_html(
@@ -109,11 +114,6 @@ function spokora_free_render_home() {
 			?>
 			<div class="notice notice-success is-dismissible"><p><?php echo esc_html__( 'Got it. This note will come back in about a month.', 'spokora-seo-toolkit' ); ?></p></div>
 		<?php endif; ?>
-		<?php
-		if ( function_exists( 'spokora_render_home_intro' ) ) {
-			spokora_render_home_intro();
-		}
-		?>
 		<div class="spokora-home-grid">
 			<section class="spokora-home-panel">
 				<h2><?php echo esc_html__( 'What is running', 'spokora-seo-toolkit' ); ?></h2>
@@ -121,7 +121,7 @@ function spokora_free_render_home() {
 					<a class="button button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=spokora-setup&step=1' ) ); ?>"><?php echo esc_html__( 'Quick setup', 'spokora-seo-toolkit' ); ?></a>
 					<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=spokora-legacy-import' ) ); ?>"><?php echo esc_html__( 'Import SEO', 'spokora-seo-toolkit' ); ?></a>
 					<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=spokora-redirects' ) ); ?>"><?php echo esc_html__( 'Redirects', 'spokora-seo-toolkit' ); ?></a>
-					<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=spokora-llms' ) ); ?>"><?php echo esc_html__( 'LLMS / AI docs', 'spokora-seo-toolkit' ); ?></a>
+					<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=spokora-llms' ) ); ?>"><?php echo esc_html__( 'AI index', 'spokora-seo-toolkit' ); ?></a>
 				</p>
 				<ul>
 					<li><a href="<?php echo esc_url( admin_url( 'admin.php?page=spokora-settings' ) ); ?>"><?php echo esc_html__( 'Business Info', 'spokora-seo-toolkit' ); ?></a></li>

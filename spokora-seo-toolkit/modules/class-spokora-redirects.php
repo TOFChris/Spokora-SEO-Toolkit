@@ -307,7 +307,7 @@ class Spokora_Redirect_Engine {
                         Enter one redirect per line. Separate the old URL and the new URL with a pipe character ( <strong>|</strong> ). When a published post or page changes its URL slug, Spokora automatically adds the 301 redirect here.
                     </p>
 
-                    <textarea name="spokora_redirect_rules" rows="15" style="width: 100%; font-family: monospace; padding: 15px; background: #121212; color: #00DDBB; border-radius: 4px; line-height: 1.5;" placeholder="/about-us/ | /about/&#10;/old-services/ | /services/"><?php echo esc_textarea( $rules ); ?></textarea>
+                    <textarea name="spokora_redirect_rules" class="spokora-code-field" rows="15" placeholder="/about-us/ | /about/&#10;/old-services/ | /services/"><?php echo esc_textarea( $rules ); ?></textarea>
 
                     <div style="margin-top: 20px;">
                         <?php submit_button( 'Save Routing Rules', 'primary', 'submit', false, array( 'style' => 'background: #FF7F00; border-color: #FF7F00; text-shadow: none; font-weight: bold;' ) ); ?>

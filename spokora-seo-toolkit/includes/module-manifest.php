@@ -54,7 +54,7 @@ function spokora_get_module_manifest() {
 			'file'      => 'class-spokora-llms.php',
 			'class'     => 'Spokora_Llms_Engine',
 			'bootstrap' => 'file',
-			'label'     => 'LLMS hub & AI docs',
+			'label'     => 'AI index (llms.txt)',
 		),
 		'markdown'    => array(
 			'file'      => 'class-spokora-markdown.php',

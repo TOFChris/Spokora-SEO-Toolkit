@@ -451,8 +451,8 @@ class Spokora_Llms_Engine {
 	public function admin_menu() {
 		add_submenu_page(
 			spokora_admin_menu_slug(),
-			__( 'AI docs', 'spokora-seo-toolkit' ),
-			__( 'AI docs', 'spokora-seo-toolkit' ),
+			__( 'AI index (llms.txt)', 'spokora-seo-toolkit' ),
+			__( 'AI index', 'spokora-seo-toolkit' ),
 			'manage_options',
 			'spokora-llms',
 			array( $this, 'render_settings_page' )
@@ -473,7 +473,8 @@ class Spokora_Llms_Engine {
 		?>
 		<div class="wrap" style="max-width:880px;">
 			<?php spokora_render_subnav( 'llms' ); ?>
-			<h1><?php esc_html_e( 'AI docs', 'spokora-seo-toolkit' ); ?></h1>
+			<h1><?php esc_html_e( 'AI index (llms.txt)', 'spokora-seo-toolkit' ); ?></h1>
+			<p class="description"><?php esc_html_e( 'This screen writes the /llms.txt index that AI crawlers read first. Ordinary SEO does not need it. Use it when you want that index, plus optional /ai-docs/{slug}.md copies of pages you flag in the editor.', 'spokora-seo-toolkit' ); ?></p>
 			<?php
 			if ( function_exists( 'spokora_render_pro_teaser' ) ) {
 				spokora_render_pro_teaser( 'keys' );
@@ -486,7 +487,7 @@ class Spokora_Llms_Engine {
 					<li><strong><?php esc_html_e( 'Hub — /llms.txt', 'spokora-seo-toolkit' ); ?></strong> — <?php esc_html_e( 'One index file crawlers read first. You edit the preamble and vocabulary on this screen.', 'spokora-seo-toolkit' ); ?></li>
 					<li><strong><?php esc_html_e( 'Spokes — /ai-docs/{slug}.md', 'spokora-seo-toolkit' ); ?></strong> — <?php esc_html_e( 'Optional markdown copies of individual pages you flag as public AI documents in the editor.', 'spokora-seo-toolkit' ); ?></li>
 				</ul>
-				<p><?php esc_html_e( 'Plain /md/{slug}.md mirrors (every published URL) are separate — see Results → Markdown library.', 'spokora-seo-toolkit' ); ?> <a href="<?php echo esc_url( $md_url ); ?>"><?php esc_html_e( 'Open markdown library', 'spokora-seo-toolkit' ); ?></a></p>
+				<p><?php esc_html_e( 'Plain /md/{slug}.md mirrors (every published URL) are separate. Those live under Configure → Markdown copies.', 'spokora-seo-toolkit' ); ?> <a href="<?php echo esc_url( $md_url ); ?>"><?php esc_html_e( 'Open Markdown copies', 'spokora-seo-toolkit' ); ?></a></p>
 			</div>
 			<div class="spokora-help__card" style="margin-bottom:24px;">
 				<h2 style="margin-top:0;"><?php esc_html_e( 'Agency workflow', 'spokora-seo-toolkit' ); ?></h2>

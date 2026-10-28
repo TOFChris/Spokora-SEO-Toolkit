@@ -24,9 +24,36 @@ function spokora_rest_meta_auth( $allowed, $meta_key, $object_id ) {
 }
 
 /**
+ * Register one string meta key with a custom sanitizer.
+ *
+ * @param string $key      Meta key.
+ * @param string $sanitize Callable name.
+ * @return void
+ */
+function spokora_register_rest_meta( $key, $sanitize ) {
+	$args = array(
+		'type'              => 'string',
+		'single'            => true,
+		'sanitize_callback' => $sanitize,
+		'auth_callback'     => 'spokora_rest_meta_auth',
+		'show_in_rest'      => array(
+			'schema' => array(
+				'type' => 'string',
+			),
+		),
+	);
+	$types = function_exists( 'spokora_scoring_post_types' )
+		? spokora_scoring_post_types()
+		: array( 'post', 'page' );
+	foreach ( $types as $type ) {
+		register_post_meta( $type, $key, $args );
+	}
+}
+
+/**
  * Register one string meta key for scoring post types.
  *
- * @param string $key     Meta key.
+ * @param string $key      Meta key.
  * @param bool   $textarea Long body (schema / markdown).
  * @return void
  */
@@ -62,6 +89,14 @@ function spokora_register_rest_string_meta( $key, $textarea = false ) {
 function spokora_register_rest_post_meta() {
 	spokora_register_rest_string_meta( '_spokora_seo_title' );
 	spokora_register_rest_string_meta( '_spokora_seo_desc', true );
+	spokora_register_rest_meta(
+		'_spokora_seo_canonical',
+		'spokora_sanitize_canonical_url'
+	);
+	spokora_register_rest_meta(
+		'_spokora_robots',
+		'spokora_sanitize_robots_directive'
+	);
 	spokora_register_rest_string_meta( '_spokora_custom_schema', true );
 	spokora_register_rest_string_meta( '_spokora_llms_public' );
 	spokora_register_rest_string_meta( '_spokora_llms_include' );

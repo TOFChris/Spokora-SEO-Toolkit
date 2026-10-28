@@ -18,8 +18,8 @@ class Spokora_Markdown {
 	public function admin_menu() {
 		add_submenu_page(
 			spokora_admin_menu_slug(),
-			__( 'Markdown library', 'spokora-seo-toolkit' ),
-			__( 'Markdown library', 'spokora-seo-toolkit' ),
+			__( 'Markdown copies', 'spokora-seo-toolkit' ),
+			__( 'Markdown copies', 'spokora-seo-toolkit' ),
 			'manage_options',
 			'spokora-markdown',
 			array( $this, 'render_page' )
@@ -43,9 +43,9 @@ class Spokora_Markdown {
 		?>
 		<div class="wrap">
 			<?php spokora_render_subnav( 'markdown' ); ?>
-			<h1><?php echo esc_html__( 'Markdown library', 'spokora-seo-toolkit' ); ?></h1>
-			<p><?php echo esc_html__( 'Read-only index of automatic markdown mirrors. Every published URL listed here also serves /md/{slug}.md with title, link, and body text. These mirrors are not the AI hub (/llms.txt) and not the optional spokes (/ai-docs/). Configure those under Create → AI docs.', 'spokora-seo-toolkit' ); ?></p>
-			<p><a href="<?php echo esc_url( admin_url( 'admin.php?page=spokora-llms' ) ); ?>"><?php echo esc_html__( 'Open AI docs (hub + spokes)', 'spokora-seo-toolkit' ); ?></a></p>
+			<h1><?php echo esc_html__( 'Markdown copies', 'spokora-seo-toolkit' ); ?></h1>
+			<p><?php echo esc_html__( 'Read-only index of automatic markdown mirrors. Every published URL listed here also serves /md/{slug}.md with the title, the page address, and the body text. These copies are separate from the AI index (/llms.txt) and from optional /ai-docs/ pages. Those are under Configure → AI index.', 'spokora-seo-toolkit' ); ?></p>
+			<p><a href="<?php echo esc_url( admin_url( 'admin.php?page=spokora-llms' ) ); ?>"><?php echo esc_html__( 'Open AI index', 'spokora-seo-toolkit' ); ?></a></p>
 			<?php if ( ! $posts ) : ?>
 				<p><?php echo esc_html__( 'No published posts or pages yet.', 'spokora-seo-toolkit' ); ?></p>
 			<?php else : ?>

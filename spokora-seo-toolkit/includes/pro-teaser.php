@@ -75,7 +75,7 @@ function spokora_pro_locked_modules() {
 		),
 		'search_performance'  => array(
 			'label'   => __( 'Search Performance', 'spokora-seo-toolkit' ),
-			'summary' => __( 'Google Search Console in wp-admin, using your OAuth.', 'spokora-seo-toolkit' ),
+			'summary' => __( 'Search performance from Google Search Console: queries and pages, how the site shows up in Google. Uses your OAuth.', 'spokora-seo-toolkit' ),
 		),
 		'rank_tracker'        => array(
 			'label'   => __( 'Rank tracker', 'spokora-seo-toolkit' ),

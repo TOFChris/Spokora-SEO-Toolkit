@@ -42,9 +42,13 @@ class Spokora_MetaBox_Engine {
 
         $seo_title     = get_post_meta( $post->ID, '_spokora_seo_title', true );
         $seo_desc      = get_post_meta( $post->ID, '_spokora_seo_desc', true );
+        $seo_canonical = get_post_meta( $post->ID, '_spokora_seo_canonical', true );
+        $seo_robots    = function_exists( 'spokora_sanitize_robots_directive' )
+            ? spokora_sanitize_robots_directive( get_post_meta( $post->ID, '_spokora_robots', true ) )
+            : '';
         $custom_schema = get_post_meta( $post->ID, '_spokora_custom_schema', true );
 
-        echo '<p style="color: #666;">' . esc_html__( 'Override global fallbacks for this page.', 'spokora-seo-toolkit' ) . '</p>';
+        echo '<p style="color: #666;">' . esc_html__( 'Title, description, canonical URL, and robots for this page. Leave a field empty to keep the WordPress default.', 'spokora-seo-toolkit' ) . '</p>';
 
         echo '<label for="spokora_seo_title" style="font-weight: bold; display: block; margin-top: 15px;">' . esc_html__( 'Custom SEO Title', 'spokora-seo-toolkit' ) . '</label>';
         echo '<input type="text" id="spokora_seo_title" name="spokora_seo_title" value="' . esc_attr( $seo_title ) . '" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px;" placeholder="' . esc_attr__( 'Max 60 characters…', 'spokora-seo-toolkit' ) . '" />';
@@ -53,6 +57,23 @@ class Spokora_MetaBox_Engine {
         echo '<label for="spokora_seo_desc" style="font-weight: bold; display: block; margin-top: 15px;">' . esc_html__( 'Custom Meta Description', 'spokora-seo-toolkit' ) . '</label>';
         echo '<textarea id="spokora_seo_desc" name="spokora_seo_desc" rows="3" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px;" placeholder="' . esc_attr__( 'Max 160 characters…', 'spokora-seo-toolkit' ) . '">' . esc_textarea( $seo_desc ) . '</textarea>';
         echo '<div id="spokora-seo-desc-count" class="spokora-seo-char-count">0/160</div>';
+
+        echo '<label for="spokora_seo_canonical" style="font-weight: bold; display: block; margin-top: 15px;">' . esc_html__( 'Canonical URL', 'spokora-seo-toolkit' ) . '</label>';
+        echo '<input type="url" id="spokora_seo_canonical" name="spokora_seo_canonical" value="' . esc_attr( (string) $seo_canonical ) . '" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px;" placeholder="https://" />';
+        echo '<p style="font-size:12px;color:#666;margin:6px 0 0;">' . esc_html__( 'Leave blank to use this page’s own address. A full https URL replaces the canonical link in the page head.', 'spokora-seo-toolkit' ) . '</p>';
+
+        echo '<label for="spokora_robots" style="font-weight: bold; display: block; margin-top: 15px;">' . esc_html__( 'Robots', 'spokora-seo-toolkit' ) . '</label>';
+        echo '<select id="spokora_robots" name="spokora_robots" style="margin-top:5px;">';
+        foreach ( array(
+            ''                 => __( 'Default (index, follow)', 'spokora-seo-toolkit' ),
+            'noindex,follow'   => __( 'Noindex, follow', 'spokora-seo-toolkit' ),
+            'index,nofollow'   => __( 'Index, nofollow', 'spokora-seo-toolkit' ),
+            'noindex,nofollow' => __( 'Noindex, nofollow', 'spokora-seo-toolkit' ),
+        ) as $val => $label ) {
+            echo '<option value="' . esc_attr( $val ) . '"' . selected( $seo_robots, $val, false ) . '>' . esc_html( $label ) . '</option>';
+        }
+        echo '</select>';
+        echo '<p style="font-size:12px;color:#666;margin:6px 0 0;">' . esc_html__( 'Writes the robots meta tag and an X-Robots-Tag header. Noindex pages are left out of the XML sitemap.', 'spokora-seo-toolkit' ) . '</p>';
 
         if ( function_exists( 'spokora_is_module_enabled' ) && spokora_is_module_enabled( 'seo_score' ) ) {
             do_action( 'spokora_after_seo_fields', $post );
@@ -107,7 +128,7 @@ class Spokora_MetaBox_Engine {
         if ( function_exists( 'spokora_render_json_ld_preset_field' ) ) {
             spokora_render_json_ld_preset_field( 'spokora_custom_schema', (int) $post->ID, 'spokora_schema_json_preset' );
         }
-        echo '<textarea id="spokora_custom_schema" name="spokora_custom_schema" rows="10" style="width: 100%; padding: 12px; margin-top: 5px; border-radius: 4px; font-family: monospace; background: #121212; color: #00DDBB; white-space: pre; overflow-wrap: normal; overflow-x: scroll;">' . esc_textarea( $custom_schema ) . '</textarea>';
+        echo '<textarea id="spokora_custom_schema" name="spokora_custom_schema" class="spokora-code-field" rows="10" style="white-space: pre; overflow-wrap: normal; overflow-x: scroll;">' . esc_textarea( $custom_schema ) . '</textarea>';
     }
 
     public function save_seo_meta_data( $post_id ) {
@@ -146,6 +167,22 @@ class Spokora_MetaBox_Engine {
         }
         if ( isset( $_POST['spokora_seo_desc'] ) ) {
             update_post_meta( $post_id, '_spokora_seo_desc', sanitize_textarea_field( wp_unslash( $_POST['spokora_seo_desc'] ) ) );
+        }
+        if ( isset( $_POST['spokora_seo_canonical'] ) && function_exists( 'spokora_sanitize_canonical_url' ) ) {
+            $canonical = spokora_sanitize_canonical_url( wp_unslash( $_POST['spokora_seo_canonical'] ) );
+            if ( '' === $canonical ) {
+                delete_post_meta( $post_id, '_spokora_seo_canonical' );
+            } else {
+                update_post_meta( $post_id, '_spokora_seo_canonical', $canonical );
+            }
+        }
+        if ( isset( $_POST['spokora_robots'] ) && function_exists( 'spokora_sanitize_robots_directive' ) ) {
+            $robots = spokora_sanitize_robots_directive( wp_unslash( $_POST['spokora_robots'] ) );
+            if ( '' === $robots ) {
+                delete_post_meta( $post_id, '_spokora_robots' );
+            } else {
+                update_post_meta( $post_id, '_spokora_robots', $robots );
+            }
         }
 
         if ( isset( $_POST['spokora_custom_schema'] ) ) {

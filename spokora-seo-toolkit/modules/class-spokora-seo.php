@@ -11,8 +11,138 @@ class SPOKORA_SEO {
 
 	public function __construct() {
 		add_filter( 'pre_get_document_title', array( $this, 'filter_document_title' ), 20, 1 );
+		add_action( 'wp_head', array( $this, 'output_canonical' ), 1 );
 		add_action( 'wp_head', array( $this, 'output_meta_description' ), 2 );
 		add_action( 'wp_head', array( $this, 'output_json_ld' ), 3 );
+		add_filter( 'wp_robots', array( $this, 'filter_robots' ), 20 );
+		add_action( 'send_headers', array( $this, 'send_robots_header' ) );
+	}
+
+	/**
+	 * Canonical link for the current public request.
+	 *
+	 * Singular posts use the editor override when it is a valid URL, otherwise
+	 * the WordPress permalink. Archives use the archive URL, including pagination.
+	 *
+	 * @return string
+	 */
+	public function canonical_url() {
+		if ( is_admin() || is_feed() || is_trackback() || is_preview() || is_embed() || is_404() || is_customize_preview() ) {
+			return '';
+		}
+
+		if ( is_singular() ) {
+			$post_id = (int) get_queried_object_id();
+			$custom  = $post_id ? spokora_sanitize_canonical_url( get_post_meta( $post_id, '_spokora_seo_canonical', true ) ) : '';
+			if ( '' !== $custom ) {
+				return $custom;
+			}
+			$core = $post_id ? wp_get_canonical_url( $post_id ) : '';
+			return is_string( $core ) ? $core : '';
+		}
+
+		$url = '';
+		if ( is_front_page() ) {
+			$url = home_url( '/' );
+		} elseif ( is_home() ) {
+			$posts_page = (int) get_option( 'page_for_posts' );
+			$url        = $posts_page ? (string) get_permalink( $posts_page ) : home_url( '/' );
+		} elseif ( is_category() || is_tag() || is_tax() ) {
+			$term = get_queried_object();
+			$link = ( $term instanceof WP_Term ) ? get_term_link( $term ) : '';
+			$url  = is_string( $link ) ? $link : '';
+		} elseif ( is_post_type_archive() ) {
+			$post_type = get_query_var( 'post_type' );
+			if ( is_array( $post_type ) ) {
+				$post_type = reset( $post_type );
+			}
+			$link = get_post_type_archive_link( (string) $post_type );
+			$url  = is_string( $link ) ? $link : '';
+		} elseif ( is_author() ) {
+			$url = (string) get_author_posts_url( (int) get_queried_object_id() );
+		} elseif ( is_day() ) {
+			$url = (string) get_day_link( (int) get_query_var( 'year' ), (int) get_query_var( 'monthnum' ), (int) get_query_var( 'day' ) );
+		} elseif ( is_month() ) {
+			$url = (string) get_month_link( (int) get_query_var( 'year' ), (int) get_query_var( 'monthnum' ) );
+		} elseif ( is_year() ) {
+			$url = (string) get_year_link( (int) get_query_var( 'year' ) );
+		} elseif ( is_search() ) {
+			$url = (string) get_search_link();
+		}
+
+		if ( '' === $url ) {
+			return '';
+		}
+
+		$paged = max( (int) get_query_var( 'paged' ), (int) get_query_var( 'page' ) );
+		if ( $paged > 1 ) {
+			$paged_url = get_pagenum_link( $paged );
+			if ( is_string( $paged_url ) && '' !== $paged_url ) {
+				$url = $paged_url;
+			}
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Print the canonical tag and remove WordPress core's singular tag so the page has one.
+	 */
+	public function output_canonical() {
+		if ( is_admin() || ! function_exists( 'spokora_should_output_seo' ) || ! spokora_should_output_seo() ) {
+			return;
+		}
+
+		$url = $this->canonical_url();
+		if ( '' === $url ) {
+			return;
+		}
+
+		remove_action( 'wp_head', 'rel_canonical' );
+		echo "\n" . '<link rel="canonical" href="' . esc_url( $url ) . '" />' . "\n";
+	}
+
+	/**
+	 * Apply the editor robots directive to the core robots meta tag.
+	 *
+	 * @param array<string, bool|string> $robots Robots directives.
+	 * @return array<string, bool|string>
+	 */
+	public function filter_robots( $robots ) {
+		if ( ! is_array( $robots ) || is_admin() || ! function_exists( 'spokora_should_output_seo' ) || ! spokora_should_output_seo() || ! is_singular() ) {
+			return $robots;
+		}
+
+		$directive = spokora_get_post_robots_directive( (int) get_queried_object_id() );
+		if ( '' === $directive ) {
+			return $robots;
+		}
+
+		if ( false !== strpos( $directive, 'noindex' ) ) {
+			$robots['noindex'] = true;
+			unset( $robots['max-image-preview'] );
+		}
+		if ( false !== strpos( $directive, 'nofollow' ) ) {
+			$robots['nofollow'] = true;
+		}
+
+		return $robots;
+	}
+
+	/**
+	 * Send the same robots directive as an HTTP header when the editor set one.
+	 */
+	public function send_robots_header() {
+		if ( is_admin() || headers_sent() || ! function_exists( 'spokora_should_output_seo' ) || ! spokora_should_output_seo() || ! is_singular() ) {
+			return;
+		}
+
+		$directive = spokora_get_post_robots_directive( (int) get_queried_object_id() );
+		if ( '' === $directive ) {
+			return;
+		}
+
+		header( 'X-Robots-Tag: ' . $directive, true );
 	}
 
 	public function filter_document_title( $title ) {

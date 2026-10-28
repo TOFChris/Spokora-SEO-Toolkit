@@ -74,6 +74,10 @@ class Spokora_List_Quick_Edit {
 		$payload = array(
 			'title'      => (string) get_post_meta( $post_id, '_spokora_seo_title', true ),
 			'desc'       => (string) get_post_meta( $post_id, '_spokora_seo_desc', true ),
+			'canonical'  => (string) get_post_meta( $post_id, '_spokora_seo_canonical', true ),
+			'robots'     => function_exists( 'spokora_sanitize_robots_directive' )
+				? spokora_sanitize_robots_directive( get_post_meta( $post_id, '_spokora_robots', true ) )
+				: '',
 			'keyword'    => isset( $kws['primary'] ) ? (string) $kws['primary'] : '',
 			'keywords'   => isset( $kws['additional'] ) && is_array( $kws['additional'] ) ? implode( "\n", $kws['additional'] ) : '',
 			'kind'       => (string) get_post_meta( $post_id, '_spokora_content_kind', true ),
@@ -119,6 +123,19 @@ class Spokora_List_Quick_Edit {
 				<label>
 					<span class="title"><?php echo esc_html__( 'Meta description', 'spokora-seo-toolkit' ); ?></span>
 					<span class="input-text-wrap"><textarea name="spokora_seo_desc" rows="2"></textarea></span>
+				</label>
+				<label>
+					<span class="title"><?php echo esc_html__( 'Canonical URL', 'spokora-seo-toolkit' ); ?></span>
+					<span class="input-text-wrap"><input type="url" name="spokora_seo_canonical" value="" placeholder="https://" /></span>
+				</label>
+				<label>
+					<span class="title"><?php echo esc_html__( 'Robots', 'spokora-seo-toolkit' ); ?></span>
+					<select name="spokora_robots">
+						<option value=""><?php echo esc_html__( 'Default (index, follow)', 'spokora-seo-toolkit' ); ?></option>
+						<option value="noindex,follow"><?php echo esc_html__( 'Noindex, follow', 'spokora-seo-toolkit' ); ?></option>
+						<option value="index,nofollow"><?php echo esc_html__( 'Index, nofollow', 'spokora-seo-toolkit' ); ?></option>
+						<option value="noindex,nofollow"><?php echo esc_html__( 'Noindex, nofollow', 'spokora-seo-toolkit' ); ?></option>
+					</select>
 				</label>
 				<label>
 					<span class="title"><?php echo esc_html__( 'Focus keyphrase', 'spokora-seo-toolkit' ); ?></span>

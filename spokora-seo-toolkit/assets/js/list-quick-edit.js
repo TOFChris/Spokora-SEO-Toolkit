@@ -32,6 +32,8 @@
 		}
 		$edit.find('input[name="spokora_seo_title"]').val(data.title || '');
 		$edit.find('textarea[name="spokora_seo_desc"]').val(data.desc || '');
+		$edit.find('input[name="spokora_seo_canonical"]').val(data.canonical || '');
+		$edit.find('select[name="spokora_robots"]').val(data.robots || '');
 		$edit.find('input[name="spokora_focus_keyword"]').val(data.keyword || '');
 		$edit.find('textarea[name="spokora_additional_keywords"]').val(data.keywords || '');
 		$edit.find('select[name="spokora_content_kind"]').val(data.kind || '');
